@@ -38,6 +38,21 @@ export const constantRouterMap = [
     }]
   },
 
+  {
+    path: '/users',
+    component: Layout,
+    name: 'users',
+    meta: { title: '用户管理', icon: 'example' },
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/users/user'),
+        meta: { title: '用户', icon: 'table' }
+      }
+    ]
+  },
+
   // {
   //   path: '/example',
   //   component: Layout,
