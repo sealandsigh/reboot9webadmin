@@ -7,3 +7,11 @@ export function getUserList(params) {
     params
   })
 }
+
+export function modifyUser(id, data) {
+  return request({
+    url: `/api/users/${id}/`,
+    method: 'patch',
+    data
+  })
+}
