@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-row type="flex" justify="end" style="padding-right:20px;">
+      <el-button type="primary" @click="addUserVisible=true">主要按钮</el-button>
+    </el-row>
     <el-table
       :data="userList"
       stripe
@@ -28,15 +31,21 @@
         prop="last_login"
         label="最后登录时间"/>
     </el-table>
+    <AddUserForm v-model="addUserVisible" @fetch="handleFetch" />
   </div>
 </template>
 <script>
 import { getUserList, modifyUser } from '@/api/user'
+import AddUserForm from './components/addUserForm'
 export default {
   name: 'UserList',
+  components: {
+    AddUserForm
+  },
   data() {
     return {
-      userList: []
+      userList: [],
+      addUserVisible: false
     }
   },
   created() {
@@ -56,6 +65,9 @@ export default {
           type: 'success'
         })
       })
+    },
+    handleFetch() {
+      this.fetchUserList()
     }
   }
 }

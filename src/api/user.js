@@ -15,3 +15,11 @@ export function modifyUser(id, data) {
     data
   })
 }
+
+export function addUser(data) {
+  return request({
+    url: '/api/userReg/',
+    method: 'post',
+    data
+  })
+}
