@@ -1,7 +1,14 @@
 <template>
   <div>
-    <el-row type="flex" justify="end" style="padding-right:20px;">
-      <el-button type="primary" @click="addUserVisible=true">主要按钮</el-button>
+    <el-row>
+      <el-col :span="12">
+        <el-input v-model="params.username" placeholder="搜索用户名" @keyup.enter.native="handleSearch">
+          <el-button slot="append" icon="el-icon-search" @click="handleSearch" />
+        </el-input>
+      </el-col>
+      <el-col :span="12" align="right" style="padding-right:20px;">
+        <el-button type="primary" @click="addUserVisible=true">主要按钮</el-button>
+      </el-col>
     </el-row>
     <el-table
       :data="userList"
@@ -39,6 +46,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row v-show="total>10" type="flex" justify="center" style="padding-top:20px;">
+      <el-pagination
+        :total="total"
+        background
+        layout="prev, pager, next"
+        @current-change="handleChange" />
+    </el-row>
     <AddUserForm v-model="addUserVisible" @fetch="handleFetch" />
     <ModifyUser v-model="modifyUserVisible" :user-id="userId" />
   </div>
@@ -58,7 +72,12 @@ export default {
       userList: [],
       addUserVisible: false,
       modifyUserVisible: false,
-      userId: 0
+      userId: 0,
+      total: 0,
+      params: {
+        page: 1,
+        username: ''
+      }
     }
   },
   created() {
@@ -66,9 +85,10 @@ export default {
   },
   methods: {
     fetchUserList() {
-      getUserList().then(res => {
+      getUserList(this.params).then(res => {
         this.userList = res.results
         console.log(res)
+        this.total = res.count
       })
     },
     handleUserStatusChange(obj) {
@@ -85,6 +105,14 @@ export default {
     handleModify(obj) {
       this.userId = obj.id
       this.modifyUserVisible = true
+    },
+    handleChange(val) {
+      this.params.page = val
+      this.fetchUserList()
+    },
+    handleSearch(val) {
+      this.params.page = 1
+      this.fetchUserList()
     }
   }
 }
