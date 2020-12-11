@@ -8,6 +8,14 @@ export function getUserList(params) {
   })
 }
 
+export function getUser(userId) {
+  return request({
+    url: `/api/users/${userId}/`,
+    method: 'get',
+    userId
+  })
+}
+
 export function modifyUser(id, data) {
   return request({
     url: `/api/users/${id}/`,

@@ -30,22 +30,35 @@
       <el-table-column
         prop="last_login"
         label="最后登录时间"/>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="100">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="handleModify(scope.row)">修改</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <AddUserForm v-model="addUserVisible" @fetch="handleFetch" />
+    <ModifyUser v-model="modifyUserVisible" :user-id="userId" />
   </div>
 </template>
 <script>
 import { getUserList, modifyUser } from '@/api/user'
 import AddUserForm from './components/addUserForm'
+import ModifyUser from './components/modifyUser'
 export default {
   name: 'UserList',
   components: {
-    AddUserForm
+    AddUserForm,
+    ModifyUser
   },
   data() {
     return {
       userList: [],
-      addUserVisible: false
+      addUserVisible: false,
+      modifyUserVisible: false,
+      userId: 0
     }
   },
   created() {
@@ -68,6 +81,10 @@ export default {
     },
     handleFetch() {
       this.fetchUserList()
+    },
+    handleModify(obj) {
+      this.userId = obj.id
+      this.modifyUserVisible = true
     }
   }
 }
