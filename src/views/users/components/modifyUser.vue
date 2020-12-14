@@ -6,19 +6,15 @@
           <el-input v-model="form.phone" placeholder="请输入手机号"/>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">立即创建</el-button>
+          <el-button type="primary" @click="submitForm">修改</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="handleClose">确 定</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import { getUser } from '@/api/user'
+import { getUser, modifyUser } from '@/api/user'
 export default {
   name: 'ModifyUser',
   props: {
@@ -61,14 +57,33 @@ export default {
     handleClose() {
       this.visible = false
       this.$emit('input', false)
+      this.userId = 0
+      this.userObj = null
       this.resetForm()
       this.title = ''
     },
     resetForm() {
       this.$refs.modifyUserForm.resetFields()
+      if (this.userId === 0) return
+      if (this.userObj === null) return
       this.form.phone = this.userObj.phone
     },
     submitForm() {
+      this.$refs.modifyUserForm.validate((valid) => {
+        if (valid) {
+          modifyUser(this.userId, this.form).then(() => {
+            this.$message({
+              message: `创建用户 ${this.userObj.name} 的手机号成功`,
+              type: 'success'
+            })
+            this.handleClose()
+            this.$emit('fetch')
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     fetchUser() {
       getUser(this.uid).then(res => {

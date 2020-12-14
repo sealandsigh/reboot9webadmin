@@ -54,7 +54,7 @@
         @current-change="handleChange" />
     </el-row>
     <AddUserForm v-model="addUserVisible" @fetch="handleFetch" />
-    <ModifyUser v-model="modifyUserVisible" :user-id="userId" />
+    <ModifyUser v-model="modifyUserVisible" :user-id="userId" @fetch="handleFetch" />
   </div>
 </template>
 <script>
