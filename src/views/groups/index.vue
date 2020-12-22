@@ -7,7 +7,7 @@
         </el-input>
       </el-col>
       <el-col :span="12" align="right" style="padding-right:20px;">
-        <el-button type="primary" @click="groupFormVisible=true">增加用户组</el-button>
+        <el-button type="primary" @click="handleAddGroup">增加用户组</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -25,7 +25,7 @@
         fixed="right"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small">修改</el-button>
+          <el-button type="text" size="small" @click="handleModifyGroup(scope.row)" >修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,7 +36,7 @@
         layout="prev, pager, next"
         @current-change="handleChange" />
     </el-row>
-    <GroupForm v-model="groupFormVisible" @fetch="handleFetch" />
+    <GroupForm v-model="groupFormVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
   </div>
 </template>
 <script>
@@ -56,7 +56,8 @@ export default {
         name: ''
       },
       groupFormVisible: false,
-      groupId: 0
+      groupId: 0,
+      groupName: ''
     }
   },
   created() {
@@ -75,11 +76,23 @@ export default {
       this.fetchGroupList()
     },
     handleSearch(val) {
+      this.params.page = 1
+      this.fetchGroupList()
+    },
+    handleAddGroup() {
+      this.groupId = 0
+      this.groupName = ''
+      this.groupFormVisible = true
     },
     handleFetch() {
       this.params.page = 1
       this.groupId = 0
       this.fetchGroupList()
+    },
+    handleModifyGroup(obj) {
+      this.groupId = obj.id
+      this.groupName = obj.name
+      this.groupFormVisible = true
     }
   }
 }

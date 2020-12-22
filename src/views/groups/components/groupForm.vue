@@ -1,6 +1,6 @@
 <template>
   <div class="group-form-container">
-    <el-dialog :visible.sync="visible" title="添加用户组" @close="handleClose">
+    <el-dialog :visible.sync="visible" :title="title" @close="handleClose">
       <el-form ref="groupForm" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="用户组: " prop="name">
           <el-input v-model="form.name" placeholder="请输入用户组"/>
@@ -25,6 +25,10 @@ export default {
     gid: {
       type: Number,
       default: 0
+    },
+    gname: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -41,24 +45,39 @@ export default {
       }
     }
   },
+  computed: {
+    title() {
+      if (this.groupId === 0) return '创建用户组'
+      else return '修改用户组'
+    }
+  },
   watch: {
     value(val) {
       this.visible = val
     },
     gid(val) {
-      if (val <= 0) return
+      if (val < 0) return
       this.groupId = val
+    },
+    gname(val) {
+      if (val === '') return
+      this.form.name = val
     }
   },
   methods: {
     resetForm() {
       this.$refs.groupForm.resetFields()
+      // 此处再思考
+      if (this.groupId === 0) this.form.name = ''
+      else this.form.name = this.gname
     },
     handleClose() {
       this.visible = false
       this.groupId = 0
-      this.$emit('input', false)
       this.resetForm()
+      // this.form.name = ''
+      // 如果在这里设置name为空修改后是有作用，但是点击创建的重置之前的name还会过去
+      this.$emit('input', false)
     },
     submitForm() {
       // console.log(this.form)
