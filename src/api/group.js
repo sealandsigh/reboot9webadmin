@@ -23,3 +23,21 @@ export function modifyGroup(id, data) {
     data
   })
 }
+
+// 修改指定用户的角色
+export function updateUserGroups(uid, data) {
+  return request({
+    url: `/api/userGroups/${uid}/`,
+    method: 'patch',
+    data
+  })
+}
+
+// 获取指定用户的用户组
+export function getUserGroupList(uid, params) {
+  return request({
+    url: `/api/userGroups/${uid}/`,
+    method: 'get',
+    params
+  })
+}

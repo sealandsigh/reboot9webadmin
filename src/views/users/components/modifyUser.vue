@@ -57,7 +57,6 @@ export default {
     handleClose() {
       this.visible = false
       this.$emit('input', false)
-      this.userId = 0
       this.userObj = null
       this.resetForm()
       this.title = ''

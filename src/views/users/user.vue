@@ -16,7 +16,7 @@
       style="width: 100%">
       <el-table-column
         prop="username"
-        label="日期"/>
+        label="username"/>
       <el-table-column
         prop="name"
         label="姓名"
@@ -39,9 +39,9 @@
         label="最后登录时间"/>
       <el-table-column
         fixed="right"
-        label="操作"
-        width="100">
+        label="操作">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="handleAssignGroup(scope.row)">指定角色</el-button>
           <el-button type="text" size="small" @click="handleModify(scope.row)">修改</el-button>
         </template>
       </el-table-column>
@@ -55,17 +55,20 @@
     </el-row>
     <AddUserForm v-model="addUserVisible" @fetch="handleFetch" />
     <ModifyUser v-model="modifyUserVisible" :user-id="userId" @fetch="handleFetch" />
+    <AssignGroup v-model="assignGroupVisible" :user-id="userId" :user-name="userName" />
   </div>
 </template>
 <script>
 import { getUserList, modifyUser } from '@/api/user'
 import AddUserForm from './components/addUserForm'
 import ModifyUser from './components/modifyUser'
+import AssignGroup from './components/assignGroup'
 export default {
   name: 'UserList',
   components: {
     AddUserForm,
-    ModifyUser
+    ModifyUser,
+    AssignGroup
   },
   data() {
     return {
@@ -73,11 +76,13 @@ export default {
       addUserVisible: false,
       modifyUserVisible: false,
       userId: 0,
+      userName: '',
       total: 0,
       params: {
         page: 1,
         username: ''
-      }
+      },
+      assignGroupVisible: false
     }
   },
   created() {
@@ -113,6 +118,11 @@ export default {
     handleSearch(val) {
       this.params.page = 1
       this.fetchUserList()
+    },
+    handleAssignGroup(obj) {
+      this.userId = obj.id
+      this.userName = obj.name
+      this.assignGroupVisible = true
     }
   }
 }
