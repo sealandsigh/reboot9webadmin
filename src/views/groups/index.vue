@@ -23,6 +23,13 @@
         width="180"/>
       <el-table-column
         fixed="right"
+        label="成员管理">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="handleGroupMember(scope.row)" >成员列表 <el-badge :value="scope.row.members" class="mark" /></el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        fixed="right"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleModifyGroup(scope.row)" >修改</el-button>
@@ -37,15 +44,18 @@
         @current-change="handleChange" />
     </el-row>
     <GroupForm v-model="groupFormVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
+    <GroupMember v-model="groupMemberVisible" :gid="groupId" :gname="groupName" />
   </div>
 </template>
 <script>
 import { getGroupList } from '@/api/group'
 import GroupForm from './components/groupForm'
+import GroupMember from './components/groupMembers'
 export default {
   name: 'Groups',
   components: {
-    GroupForm
+    GroupForm,
+    GroupMember
   },
   data() {
     return {
@@ -56,6 +66,7 @@ export default {
         name: ''
       },
       groupFormVisible: false,
+      groupMemberVisible: false,
       groupId: 0,
       groupName: ''
     }
@@ -93,6 +104,11 @@ export default {
       this.groupId = obj.id
       this.groupName = obj.name
       this.groupFormVisible = true
+    },
+    handleGroupMember(obj) {
+      this.groupId = obj.id
+      this.groupName = obj.name
+      this.groupMemberVisible = true
     }
   }
 }

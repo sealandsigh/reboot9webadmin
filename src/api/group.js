@@ -33,10 +33,19 @@ export function updateUserGroups(uid, data) {
   })
 }
 
-// 获取指定用户的用户组
+// 获取指定用户的所有角色
 export function getUserGroupList(uid, params) {
   return request({
     url: `/api/userGroups/${uid}/`,
+    method: 'get',
+    params
+  })
+}
+
+// 获取指定用户组下的成员列表
+export function getGroupMemberList(gid, params) {
+  return request({
+    url: `/api/groupMembers/${gid}/`,
     method: 'get',
     params
   })
