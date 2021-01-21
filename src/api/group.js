@@ -50,3 +50,12 @@ export function getGroupMemberList(gid, params) {
     params
   })
 }
+
+// 从用户组中移除指定用户
+export function removeGroupMemberList(gid, data) {
+  return request({
+    url: `/api/groupMembers/${gid}/`,
+    method: 'delete',
+    data
+  })
+}

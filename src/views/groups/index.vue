@@ -44,7 +44,7 @@
         @current-change="handleChange" />
     </el-row>
     <GroupForm v-model="groupFormVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
-    <GroupMember v-model="groupMemberVisible" :gid="groupId" :gname="groupName" />
+    <GroupMember v-model="groupMemberVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
   </div>
 </template>
 <script>

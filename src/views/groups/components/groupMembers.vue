@@ -18,6 +18,13 @@
         <el-table-column
           prop="phone"
           label="电话"/>
+        <el-table-column
+          fixed="right"
+          label="成员管理">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleRemoveMember(scope.row)" >移除成员</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-row v-show="total>params.page_size" type="flex" justify="center" style="padding-top:20px;">
         <el-pagination
@@ -25,7 +32,7 @@
           :page-size="params.page_size"
           :current-page.sync="params.page"
           background
-          layout="prev, pager, next"
+          layout="total, prev, pager, next"
           @current-change="handleChange" />
       </el-row>
     </el-dialog>
@@ -33,6 +40,7 @@
 </template>
 <script>
 import { getGroupMemberList } from '@/api/group'
+import { removeGroupMemberList } from '@/api/group'
 export default {
   name: 'GroupMember',
   props: {
@@ -82,6 +90,7 @@ export default {
     handleClose() {
       this.visible = false
       this.$emit('input', false)
+      this.$emit('fetch')
       setTimeout(() => {
         this.memberList = []
       }, 500)
@@ -98,6 +107,22 @@ export default {
     handleChange(val) {
       this.params.page = val
       this.fetchGroupMemberList()
+    },
+    handleRemoveMember(obj) {
+      removeGroupMemberList(this.gid, { uid: obj.id }).then(res => {
+        if (res.status === 0) {
+          this.$message({
+            message: `从 ${this.gname} 组中移除 ${obj.name} 成功`,
+            type: 'success'
+          })
+          this.fetchGroupMemberList()
+        } else {
+          this.$message({
+            message: `从 ${this.gname} 组中移除 ${obj.name} 失败: ${res.errmsg}`,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }
