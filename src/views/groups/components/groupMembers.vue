@@ -97,6 +97,9 @@ export default {
     },
     fetchGroupMemberList() {
       this.loading = true
+      if (this.memberList.length === 1 && this.params.page > 1) {
+        this.$set(this.params, 'page', this.params.page - 1)
+      }
       getGroupMemberList(this.gid, this.params).then(res => {
         this.memberList = res.results
         this.total = res.count
