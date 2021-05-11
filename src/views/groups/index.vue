@@ -30,6 +30,13 @@
       </el-table-column>
       <el-table-column
         fixed="right"
+        label="权限管理">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="handleGroupPermission(scope.row)" >修改权限 </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        fixed="right"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleModifyGroup(scope.row)" >修改</el-button>
@@ -45,17 +52,20 @@
     </el-row>
     <GroupForm v-model="groupFormVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
     <GroupMember v-model="groupMemberVisible" :gid="groupId" :gname="groupName" @fetch="handleFetch" />
+    <GroupPermission v-model="groupPermissionVisble" :gid="groupId" :gname="groupName" />
   </div>
 </template>
 <script>
 import { getGroupList } from '@/api/group'
 import GroupForm from './components/groupForm'
 import GroupMember from './components/groupMembers'
+import GroupPermission from './components/groupPermission'
 export default {
   name: 'Groups',
   components: {
     GroupForm,
-    GroupMember
+    GroupMember,
+    GroupPermission
   },
   data() {
     return {
@@ -67,6 +77,7 @@ export default {
       },
       groupFormVisible: false,
       groupMemberVisible: false,
+      groupPermissionVisble: false,
       groupId: 0,
       groupName: ''
     }
@@ -109,6 +120,11 @@ export default {
       this.groupId = obj.id
       this.groupName = obj.name
       this.groupMemberVisible = true
+    },
+    handleGroupPermission(obj) {
+      this.groupId = obj.id
+      this.groupName = obj.name
+      this.groupPermissionVisble = true
     }
   }
 }
