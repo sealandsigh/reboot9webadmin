@@ -17,7 +17,7 @@ export function updateGroupPermissionList(gid, data) {
   })
 }
 
-// 获取指定用户组的权限列表
+// 获取指定用户组的权限列表测试git
 export function getGroupPermissionList(gid, params) {
   return request({
     url: `/api/groupPermission/${gid}/`,
