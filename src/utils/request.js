@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import { Message } from 'element-ui'
+import { Message } from 'element-ui'
 // import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
@@ -37,9 +37,30 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    if (error.response.status === 401) {
+    if (!error.response) {
+      Message.error('系统错误')
+    } else if (error.response.status === 401) {
       store.dispatch('FedLogOut').then(() => {
         router.push({ path: '/login' })
+      })
+    } else if (error.response.status === 403) {
+      Message({
+        message: '权限拒绝',
+        type: 'error',
+        duration: 1500,
+        onclose: function() {
+          router.push({ path: '/login' })
+        }
+      })
+    } else if (error.response.status === 400) {
+      Message({
+        message: '认证失败,用户名或密码错误',
+        type: 'error'
+      })
+    } else if (error.response.status === 500) {
+      Message({
+        message: '服务器内部错误',
+        type: 'error'
       })
     }
     return Promise.reject(error)
