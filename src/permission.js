@@ -1,16 +1,40 @@
 import router from './router'
-// import store from './store'
+import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 // import { Message } from 'element-ui'
-// import { getToken } from '@/utils/auth' // getToken from cookie
+import { getToken } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
-// const whiteList = ['/login'] // 不重定向白名单
+const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  next()
+  if (getToken()) {
+    if (to.path === '/login') {
+      next({ path: '/' })
+      NProgress.done()
+    } else {
+      if (store.getters.name.length === 0) {
+        store.dispatch('GetInfo').then(() => { // 拉取用户信息
+          next()
+        }).catch((err) => {
+          console.log(err)
+          // store.dispatch('FedLogOut').then(() => {
+          //   Message.error(err || 'Verification failed, please login again')
+          //   next({ path: '/' })
+          // })
+        })
+      }
+    }
+  } else {
+    if (whiteList.indexOf(to.path) !== -1) {
+      next()
+    } else {
+      next(`/login?redirect=${to.path}`)
+      NProgress.done()
+    }
+  }
   // if (getToken()) {
   //   if (to.path === '/login') {
   //     next({ path: '/' })
