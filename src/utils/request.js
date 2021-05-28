@@ -47,8 +47,8 @@ service.interceptors.response.use(
       Message({
         message: '权限拒绝',
         type: 'error',
-        duration: 1500,
-        onclose: function() {
+        duration: 800,
+        onClose: function() {
           router.push({ path: '/login' })
         }
       })
