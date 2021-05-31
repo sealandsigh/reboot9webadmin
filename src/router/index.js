@@ -53,6 +53,7 @@ export const constantRouterMap = [
       {
         path: 'groups',
         name: 'groups',
+        permission: 'resources.add_ip',
         component: () => import('@/views/groups'),
         meta: { title: '用户组' }
       }

@@ -22,7 +22,7 @@
           :key="child.path"
           :base-path="resolvePath(child.path)"
           class="nest-menu" />
-        <app-link v-else :to="resolvePath(child.path)" :key="child.name">
+        <app-link v-else-if="handleCheckPermission(child.permission)" :to="resolvePath(child.path)" :key="child.name">
           <el-menu-item :index="resolvePath(child.path)">
             <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title" />
           </el-menu-item>
@@ -38,6 +38,7 @@ import path from 'path'
 import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
+import { checkPermission } from '@/utils/auth'
 
 export default {
   name: 'SidebarItem',
@@ -95,6 +96,12 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
+    },
+    handleCheckPermission(perm) {
+      if (perm) {
+        return checkPermission(perm)
+      }
+      return true
     }
   }
 }
