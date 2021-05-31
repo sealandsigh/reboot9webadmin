@@ -7,7 +7,7 @@
         </el-input>
       </el-col>
       <el-col :span="12" align="right" style="padding-right:20px;">
-        <el-button type="primary" @click="addUserVisible=true">主要按钮</el-button>
+        <el-button v-if="addGroupPerm" type="primary" @click="addUserVisible=true">添加用户</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -60,6 +60,7 @@
 </template>
 <script>
 import { getUserList, modifyUser } from '@/api/user'
+import { checkPermission } from '@/utils/auth'
 import AddUserForm from './components/addUserForm'
 import ModifyUser from './components/modifyUser'
 import AssignGroup from './components/assignGroup'
@@ -83,6 +84,11 @@ export default {
         username: ''
       },
       assignGroupVisible: false
+    }
+  },
+  computed: {
+    addGroupPerm: function() {
+      return checkPermission('users.add_user')
     }
   },
   created() {
