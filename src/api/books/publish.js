@@ -9,7 +9,7 @@ export function getPublishList(params) {
   })
 }
 
-//创建出版社
+// 创建出版社
 export function createPublish(data) {
   return request({
     url: '/api/publish/',
@@ -18,7 +18,7 @@ export function createPublish(data) {
   })
 }
 
-//修改出版社
+// 修改出版社
 export function updatePublish(id, data) {
   return request({
     url: '/api/publish/' + id + '/',
@@ -27,7 +27,7 @@ export function updatePublish(id, data) {
   })
 }
 
-//删除出版社
+// 删除出版社
 export function deletePublish(id) {
   return request({
     url: '/api/publish/' + id + '/',

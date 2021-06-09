@@ -34,7 +34,7 @@ import PublishList from './table'
 import PublishForm from './form'
 
 export default {
-  name: 'publish',
+  name: 'Publish',
   /* 注册组件 */
   components: {
     PublishList,
@@ -79,6 +79,29 @@ export default {
       this.fetchData()
       // console.log(this.params.page)
     },
+    searchClick() {
+      this.fetchData()
+    },
+
+    /* 添加功能,弹出模态窗、提交数据、取消 */
+    handleAddBtn() {
+      this.dialogVisibleForAdd = true
+    },
+    handleSubmitAdd(value) {
+      console.log(value)
+      createPublish(value).then(res => {
+        this.$message({
+          message: '创建成功',
+          type: 'success'
+        })
+        this.handleCancelAdd()
+        this.fetchData()
+      })
+    },
+    handleCancelAdd() {
+      this.dialogVisibleForAdd = false
+      this.$refs.publishForm.$refs.form.resetFields() // 清除掉子组件表单的数据
+    },
     handleEdit(value) {
       this.currentValue = { ...value } // 将子组件传来的值给父组件的变量，然后渲染表单
       console.log(this.currentValue)
@@ -100,6 +123,19 @@ export default {
     handleCancelEdit() {
       this.dialogVisibleForEdit = false
       this.$refs.publishForm.$refs.form.resetFields()
+    },
+    /* 删除 */
+    handleDelete(id) {
+      deletePublish(id).then(res => {
+        this.$message({
+          message: '删除组成功',
+          type: 'success'
+        })
+        this.fetchData()
+      },
+      err => {
+        console.log(err.message)
+      })
     }
   }
 }

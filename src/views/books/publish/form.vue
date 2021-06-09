@@ -1,6 +1,6 @@
 <template>
   <div class="publish-form">
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-form">
+    <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="demo-form">
 
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" placeholder="请输入名称"></el-input>
@@ -28,7 +28,7 @@
 <script>
 
 export default {
-  name: 'pulish-form',
+  name: 'PublishForm',
   props: {
     form: { // 接受父组件传递过来的值渲染表单
       type: Object,
