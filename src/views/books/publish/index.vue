@@ -1,7 +1,33 @@
 <template>
   <div class="publish">
+    <div>
+      <!--搜索-->
+      <el-col :span="8">
+        <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="searchClick">
+          <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
+        </el-input>
+      </el-col>
+
+      <!--添加按钮-->
+      <el-col :span="16" style="text-align: right">
+        <el-button type="primary" @click="handleAddBtn">添加出版商</el-button>
+      </el-col>
+    </div>
+
     <!--表格-->
     <publish-list :value="publishs" @edit="handleEdit" @delete="handleDelete"></publish-list>
+
+    <!--模态窗增加表单-->
+    <el-dialog
+      :visible.sync="dialogVisibleForAdd"
+      title="添加"
+      width="50%">
+      <publish-form
+        ref="publishForm"
+        @submit="handleSubmitAdd"
+        @cancel="handleCancelAdd">
+      </publish-form>
+    </el-dialog>
 
     <!--模态窗更新表单-->
     <el-dialog
@@ -48,7 +74,7 @@ export default {
       currentValue: {},
       publishs: [],
       totalNum: 0,
-      pagesize: 2,
+      pagesize: 10,
       params: {
         page: 1,
         search: ''
