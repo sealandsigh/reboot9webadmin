@@ -3,6 +3,18 @@
     <!--表格-->
     <publish-list :value="publishs" @edit="handleEdit" @delete="handleDelete"></publish-list>
 
+    <!--模态窗更新表单-->
+    <el-dialog
+      :visible.sync="dialogVisibleForEdit"
+      title="更新"
+      width="50%">
+      <publish-form
+        ref="publishForm"
+        :form="currentValue"
+        @submit="handleSubmitEdit"
+        @cancel="handleCancelEdit" />
+    </el-dialog>
+
     <!--分页-->
     <center>
       <el-pagination
@@ -71,6 +83,23 @@ export default {
       this.currentValue = { ...value } // 将子组件传来的值给父组件的变量，然后渲染表单
       console.log(this.currentValue)
       this.dialogVisibleForEdit = true
+    },
+    handleSubmitEdit(value) {
+      const { id, ...params } = value // 很神奇，能把表单的值拆解成自己想要的样子
+      console.log(id)
+      console.log(params)
+      updatePublish(id, params).then(res => {
+        this.$message({
+          message: '更新组成功',
+          type: 'success'
+        })
+        this.handleCancelEdit()
+        this.fetchData()
+      })
+    },
+    handleCancelEdit() {
+      this.dialogVisibleForEdit = false
+      this.$refs.publishForm.$refs.form.resetFields()
     }
   }
 }
