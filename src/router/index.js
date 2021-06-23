@@ -87,6 +87,33 @@ export const constantRouterMap = [
     ]
   },
 
+  {
+    path: '/workorder',
+    component: Layout,
+    name: '工单系统',
+    meta: { title: '工单系统', icon: 'example' },
+    children: [
+      {
+        path: 'apply',
+        name: '工单申请',
+        component: () => import('@/views/workorder/apply/index'),
+        meta: { title: '工单申请', icon: 'table' }
+      },
+      {
+        path: 'list',
+        name: '申请列表',
+        component: () => import('@/views/workorder/list/index'),
+        meta: { title: '申请列表', icon: 'tree' }
+      },
+      {
+        path: 'history',
+        name: '工单历史',
+        component: () => import('@/views/workorder/history/index'),
+        meta: { title: '工单历史', icon: 'table' }
+      }
+    ]
+  },
+
   // {
   //   path: '/example',
   //   component: Layout,
