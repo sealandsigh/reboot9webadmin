@@ -56,6 +56,7 @@ const user = {
           commit('SET_USERNAME', response.username)
           commit('SET_NAME', response.name)
           commit('SET_PERMISSION', response.permission)
+          commit('SET_ROLES', response.roles)
           resolve(response)
         }).catch(error => {
           reject(error)
