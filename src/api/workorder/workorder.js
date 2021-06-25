@@ -22,7 +22,7 @@ export function createWorkOrder(data) {
 export function updateWorkOrder(id, data) {
   return request({
     url: '/api/workorder/' + id + '/',
-    method: 'put',
+    method: 'patch',
     data
   })
 }
