@@ -48,8 +48,10 @@ export default {
   name: 'AuthorList',
   props: {
     value: {
-      type: Object,
-      default() {}
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   methods: {

@@ -49,8 +49,10 @@ export default {
   // props: ['value'],
   props: {
     value: {
-      type: Object,
-      default() {}
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   methods: {
