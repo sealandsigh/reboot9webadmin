@@ -9,6 +9,14 @@ export function getTaskList(params) {
   })
 }
 
+// 任务详情
+export function detailTask(id) {
+  return request({
+    url: '/api/task/' + id + '/',
+    method: 'get'
+  })
+}
+
 // 创建任务
 export function createTask(data) {
   return request({
