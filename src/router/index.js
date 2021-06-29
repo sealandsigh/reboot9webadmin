@@ -114,6 +114,27 @@ export const constantRouterMap = [
     ]
   },
 
+  {
+    path: '/tasks',
+    component: Layout,
+    name: '任务系统',
+    meta: { title: '任务系统', icon: 'example' },
+    children: [
+      {
+        path: 'add',
+        name: '任务添加',
+        component: () => import('@/views/tasks/add/index'),
+        meta: { title: '任务添加', icon: 'table' }
+      },
+      {
+        path: 'list',
+        name: '任务列表',
+        component: () => import('@/views/tasks/list/index'),
+        meta: { title: '任务列表', icon: 'tree' }
+      }
+    ]
+  },
+
   // {
   //   path: '/example',
   //   component: Layout,
