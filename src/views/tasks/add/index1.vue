@@ -7,12 +7,17 @@
       </el-form-item>
 
       <el-form-item label="上传文件：" prop="playbook">
-        <input ref="files" type="file" @change="getFile($event)" >
-        <!--<el-input v-model="form.playbook" type="file"/>-->
+        <el-upload
+          ref="upload"
+          :file-list="filelist"
+          :auto-upload="false"
+          action="">
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+        </el-upload>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit($event)">Create</el-button>
+        <el-button type="primary" @click="onSubmit">Create</el-button>
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
@@ -25,6 +30,7 @@ import { createTask } from '@/api/task/task'
 export default {
   data() {
     return {
+      filelist: [],
       form: {
         name: '',
         playbook: ''
@@ -32,43 +38,27 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入任务名', trigger: 'blur' }
-        ],
-        playbook: [
-          { required: true, message: '请上传文件', trigger: 'blur' }
         ]
       }
     }
   },
 
   methods: {
-    getFile(event) {
-      // console.log(this.$refs.files.files[0])
-      console.log(event)
-      console.log(event.target.files[0])
-      this.form.playbook = event.target.files[0]
-      // console.log(this.form.playbook)
-    },
-    onSubmit(event) {
+    onSubmit() {
       this.$refs.form.validate((valid) => {
         if (!valid) {
           return
         }
-        // console.log(event)
-        const formData = new FormData()
-        formData.append('name', this.form.name)
-        formData.append('playbook', this.form.playbook)
-
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-        createTask(formData, config).then(res => {
+        console.log(this.filelist)
+        this.form.playbook = this.filelist[0]
+        const params = Object.assign({}, this.form)
+        console.log(params)
+        createTask(params).then(res => {
           this.$message({
             message: '创建成功',
             type: 'success'
           })
-          this.$router.push({ path: '/tasks/list' })
+          this.onCancel()
         })
       })
     },
