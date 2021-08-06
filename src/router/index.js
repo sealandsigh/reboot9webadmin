@@ -135,6 +135,27 @@ export const constantRouterMap = [
     ]
   },
 
+  {
+    path: '/esmanager',
+    component: Layout,
+    name: '日志管理系统',
+    meta: { title: '日志管理系统', icon: 'example' },
+    children: [
+      {
+        path: 'escluster',
+        name: '集群管理',
+        component: () => import('@/views/esmanager/escluster/index'),
+        meta: { title: '集群管理', icon: 'table' }
+      },
+      {
+        path: 'escluster',
+        name: '索引管理',
+        component: () => import('@/views/esmanager/indexmanage/index'),
+        meta: { title: '索引管理', icon: 'table' }
+      }
+    ]
+  },
+
   // {
   //   path: '/example',
   //   component: Layout,
