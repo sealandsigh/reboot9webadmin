@@ -35,7 +35,7 @@
           <el-button
             size="mini"
             type="danger"
-            @click="handleEdit(scope.row)">删除</el-button>
+            @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
 
