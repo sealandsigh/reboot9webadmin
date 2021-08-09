@@ -4,7 +4,7 @@
       <!--搜索-->
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="6">
-          <el-select v-model="value" clearable placeholder="请选择">
+          <el-select v-model="value" clearable placeholder="环境筛选：-- ALL --">
             <el-option
               v-for="item in options"
               :key="item.value"
