@@ -91,8 +91,8 @@ export default {
           { required: true, message: '请输入集群环境', trigger: 'blur' }
         ],
         clientIp: [
-          { required: true, message: '请输入集群ip地址', trigger: 'blur' },
-          { validator: validateIP, trigger: 'blur' }
+          { required: true, message: '请输入集群ip地址', trigger: 'blur' }
+          // { validator: validateIP, trigger: 'blur' }
         ],
         monitorIp: [
           { required: true, message: '请输入集群监控ip地址', trigger: 'blur' },

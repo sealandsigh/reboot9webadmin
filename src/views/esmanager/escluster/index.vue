@@ -113,6 +113,8 @@ export default {
     },
     handleSubmitAdd(value) {
       console.log(value)
+      const { id, ...params } = value
+      console.log(id)
       createEscluster(value).then(res => {
         this.$message({
           message: '创建成功',
@@ -120,6 +122,13 @@ export default {
         })
         this.handleCancelAdd()
         this.fetchData()
+      },
+      err => {
+        console.log(err.response)
+        this.$message({
+          message: `创建 ${params.code} 失败: ${err.response.request.response}`,
+          type: 'error'
+        })
       })
     },
     handleCancelAdd() {
@@ -137,11 +146,14 @@ export default {
       console.log(params)
       updateEscluster(id, params).then(res => {
         this.$message({
-          message: '更新组成功',
+          message: '更新ES集群成功',
           type: 'success'
         })
         this.handleCancelEdit()
         this.fetchData()
+      },
+      err => {
+        console.log(err.message)
       })
     },
     handleCancelEdit() {
@@ -152,7 +164,7 @@ export default {
     handleDelete(id) {
       deleteEscluster(id).then(res => {
         this.$message({
-          message: '删除组成功',
+          message: '删除ES集群成功',
           type: 'success'
         })
         this.fetchData()
