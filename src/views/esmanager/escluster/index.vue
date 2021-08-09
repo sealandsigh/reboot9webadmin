@@ -2,16 +2,30 @@
   <div class="publish">
     <div>
       <!--搜索-->
-      <el-col :span="8">
-        <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="searchClick">
-          <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
-        </el-input>
-      </el-col>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="6">
+          <el-select v-model="value" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
 
-      <!--添加按钮-->
-      <el-col :span="16" style="text-align: right">
-        <el-button type="primary" @click="handleAddBtn">添加ES集群</el-button>
-      </el-col>
+        <!--选择-->
+        <el-col :span="6">
+          <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="searchClick">
+            <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
+          </el-input>
+        </el-col>
+
+        <!--添加按钮-->
+        <el-col :span="6" style="text-align: right">
+          <el-button type="primary" @click="handleAddBtn">添加ES集群</el-button>
+        </el-col>
+      </el-row>
     </div>
 
     <!--表格-->
@@ -72,14 +86,37 @@ export default {
       dialogVisibleForEdit: false,
       currentValue: {},
       esclusters: [],
+      searchEsclusters: [],
       totalNum: 0,
       pagesize: 10,
       params: {
         page: 1,
         search: ''
+      },
+      options: [{
+        value: 'test',
+        label: 'test'
+      }, {
+        value: 'stg',
+        label: 'stg'
+      }, {
+        value: 'prod',
+        label: 'prod'
+      }],
+      value: ''
+    }
+  },
+
+  watch: {
+    value(val) {
+      if (this.value === '') {
+        this.esclusters = this.searchEsclusters
+      } else {
+        this.esclusters = this.searchEnv(val)
       }
     }
   },
+
   /* 根据生命周期，调用接口初始化数据 */
   created() {
     this.fetchData()
@@ -92,7 +129,7 @@ export default {
     fetchData() {
       getEsclusterList(this.params).then(res => {
         console.log(res)
-        this.esclusters = res.results
+        this.searchEsclusters = this.esclusters = res.results
         this.totalNum = res.count
       })
     },
@@ -173,6 +210,19 @@ export default {
       err => {
         console.log(err.message)
       })
+    },
+    searchEnv(val) {
+      return this.esclusters.filter(item => {
+        console.log(val)
+        console.log(item)
+        if (item.env === val) {
+          console.log(item)
+          return item
+        }
+      })
+    },
+    flushValue() {
+      this.value === ''
     }
   }
 }
