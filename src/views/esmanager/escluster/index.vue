@@ -127,7 +127,8 @@ export default {
         console.log(err.response)
         this.$message({
           message: `创建 ${params.code} 失败: ${err.response.request.response}`,
-          type: 'error'
+          type: 'error',
+          duration: 5000
         })
       })
     },
