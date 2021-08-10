@@ -1,7 +1,7 @@
 <template>
   <div class="publish">
     <div>
-      <!--搜索-->
+      <!--选择-->
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="6">
           <el-select v-model="value" clearable placeholder="环境筛选：-- ALL --">
@@ -14,7 +14,18 @@
           </el-select>
         </el-col>
 
-        <!--选择-->
+        <el-col :span="6">
+          <el-select v-model="valuePort" clearable placeholder="端口筛选：-- ALL --">
+            <el-option
+              v-for="item in optionsPort"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+
+        <!--搜索-->
         <el-col :span="6">
           <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="searchClick">
             <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
@@ -103,7 +114,18 @@ export default {
         value: 'prod',
         label: 'prod'
       }],
-      value: ''
+      optionsPort: [{
+        value: '9200',
+        label: '9200'
+      }, {
+        value: '9300',
+        label: '9300'
+      }, {
+        value: '1',
+        label: '1'
+      }],
+      value: '',
+      valuePort: ''
     }
   },
 
@@ -113,6 +135,13 @@ export default {
         this.esclusters = this.searchEsclusters
       } else {
         this.esclusters = this.searchEnv(val)
+      }
+    },
+    valuePort(val) {
+      if (this.valuePort === '') {
+        this.esclusters = this.searchEsclusters
+      } else {
+        this.esclusters = this.searchPort(val)
       }
     }
   },
@@ -213,16 +242,19 @@ export default {
     },
     searchEnv(val) {
       return this.esclusters.filter(item => {
-        console.log(val)
-        console.log(item)
         if (item.env === val) {
           console.log(item)
           return item
         }
       })
     },
-    flushValue() {
-      this.value === ''
+    searchPort(val) {
+      return this.esclusters.filter(item => {
+        if (item.port === parseInt(val)) {
+          console.log(item)
+          return item
+        }
+      })
     }
   }
 }
