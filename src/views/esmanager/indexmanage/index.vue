@@ -40,7 +40,7 @@
     </div>
 
     <!--表格-->
-    <estopic-list :value="estopics" @edit="handleEdit" @delete="handleDelete"></estopic-list>
+    <estopic-list :value="estopics" @edit="handleEdit" @delete="handleDelete" @sort="sortChange"></estopic-list>
 
     <!--模态窗增加表单-->
     <el-dialog
@@ -102,7 +102,8 @@ export default {
       pagesize: 10,
       params: {
         page: 1,
-        search: ''
+        search: '',
+        ordering: ''
       },
       options: [{
         value: 'test',
@@ -255,6 +256,28 @@ export default {
           return item
         }
       })
+    },
+    sortChange(column) {
+      console.log(column)
+      if (column) {
+        if (column.prop === 'createTime' && column.order === 'ascending') {
+          console.log(column.prop)
+          console.log(column.order)
+          this.params.ordering = 'createTime'
+          getTopicList(this.params).then(res => {
+            console.log(res)
+            this.estopics = res.results
+          })
+        } else if (column.prop === 'createTime' && column.order === 'descending') {
+          console.log(column.prop)
+          console.log(column.order)
+          this.params.ordering = '-createTime'
+          getTopicList(this.params).then(res => {
+            console.log(res)
+            this.estopics = res.results
+          })
+        }
+      }
     }
   }
 }

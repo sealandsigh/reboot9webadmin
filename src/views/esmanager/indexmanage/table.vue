@@ -4,7 +4,8 @@
       :data="value"
       border
       stripe
-      style="width: 100%">
+      style="width: 100%"
+      @sort-change="sortChange">
 
       <el-table-column
         label="ID"
@@ -28,7 +29,7 @@
       <el-table-column
         label="索引创建时间"
         prop="createTime"
-        sortable>
+        sortable="custom">
       </el-table-column>
 
       <el-table-column
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'EstopicList',
   // props: ['value'],
@@ -66,6 +68,7 @@ export default {
       }
     }
   },
+
   methods: {
     /* 点击编辑按钮，将子组件的事件传递给父组件 */
     handleEdit(value) {
@@ -88,6 +91,10 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+
+    sortChange(column) {
+      this.$emit('sort', column)
     }
   }
 }
