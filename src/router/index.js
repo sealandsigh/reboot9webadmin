@@ -148,7 +148,7 @@ export const constantRouterMap = [
         meta: { title: '集群管理', icon: 'table' }
       },
       {
-        path: 'escluster',
+        path: 'indexmanage',
         name: '索引管理',
         component: () => import('@/views/esmanager/indexmanage/index'),
         meta: { title: '索引管理', icon: 'table' }
