@@ -276,6 +276,14 @@ export default {
             console.log(res)
             this.estopics = res.results
           })
+        } else if (column.prop === null && column.order === null) {
+          console.log(column.prop)
+          console.log(column.order)
+          this.params.ordering = ''
+          getTopicList(this.params).then(res => {
+            console.log(res)
+            this.estopics = res.results
+          })
         }
       }
     }
