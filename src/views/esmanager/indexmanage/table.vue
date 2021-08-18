@@ -14,6 +14,18 @@
       </el-table-column>
 
       <el-table-column
+        :formatter="getfor"
+        label="所属集群"
+        prop="escluster"
+        width="140px">
+        <!-- <template slot-scope="scope">
+          <div v-for="item in scope.row.escluster" :key="item.num">
+            <span style="float: left">{{ item.code }},</span>
+          </div>
+        </template> -->
+      </el-table-column>
+
+      <el-table-column
         label="索引名称"
         prop="name"
         width="290px">
@@ -95,6 +107,16 @@ export default {
 
     sortChange(column) {
       this.$emit('sort', column)
+    },
+
+    getfor(row, column) {
+      var esclustername = []
+      for (var i = 0; i < row.escluster.length; i++) {
+        console.log(esclustername)
+        // this.rowlist.push(row.roles[i].name)
+        esclustername.push(row.escluster[i].code)
+      }
+      return esclustername.join()
     }
   }
 }
