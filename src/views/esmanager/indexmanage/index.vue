@@ -4,20 +4,9 @@
       <!--选择-->
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="6">
-          <el-select v-model="value" clearable placeholder="环境筛选：-- ALL --">
+          <el-select v-model="value" multiple clearable placeholder="集群筛选：-- ALL --" @change="searchEnv">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-
-        <el-col :span="6">
-          <el-select v-model="valuePort" clearable placeholder="端口筛选：-- ALL --">
-            <el-option
-              v-for="item in optionsPort"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -93,6 +82,7 @@ export default {
   /* 数据 */
   data() {
     return {
+      searchList: [],
       dialogVisibleForAdd: false,
       dialogVisibleForEdit: false,
       currentValue: {},
@@ -103,75 +93,67 @@ export default {
       params: {
         page: 1,
         search: '',
-        ordering: ''
+        ordering: '',
+        cluster_include: ''
       },
       options: [{
-        value: 'test',
-        label: 'test'
+        value: 'testtest',
+        label: 'testtest'
       }, {
-        value: 'stg',
-        label: 'stg'
+        value: 't-me-elk',
+        label: 't-me-elk'
       }, {
-        value: 'prod',
-        label: 'prod'
+        value: 'd-appsearch-elk',
+        label: 'd-appsearch-elk'
       }],
-      optionsPort: [{
-        value: '9200',
-        label: '9200'
-      }, {
-        value: '9300',
-        label: '9300'
-      }, {
-        value: '1',
-        label: '1'
-      }],
-      value: '',
-      valuePort: ''
+      value: ''
     }
   },
 
-  watch: {
-    value(val) {
-      if (this.value === '') {
-        this.estopics = this.searchEstopics
-      } else {
-        this.estopics = this.searchEnv(val)
-      }
-    },
-    valuePort(val) {
-      if (this.valuePort === '') {
-        this.estopics = this.searchEstopics
-      } else {
-        this.estopics = this.searchPort(val)
-      }
-    }
-  },
+  // watch: {
+  //   value(val) {
+  //     if (this.value === '') {
+  //       this.estopics = this.searchEstopics
+  //     } else {
+  //       this.estopics = this.searchEnv(val)
+  //     }
+  //   },
+  //   valuePort(val) {
+  //     if (this.valuePort === '') {
+  //       this.estopics = this.searchEstopics
+  //     } else {
+  //       this.estopics = this.searchPort(val)
+  //     }
+  //   }
+  // },
 
   /* 根据生命周期，调用接口初始化数据 */
   created() {
-    this.fetchData()
+    this.fetchData(this.params)
   },
 
   /* 接口调用集 */
   methods: {
 
     /* 调用list接口，拉取数据 */
-    fetchData() {
-      getTopicList(this.params).then(res => {
-        console.log(res)
-        this.searchEsclusters = this.estopics = res.results
-        this.totalNum = res.count
-      })
+    async fetchData(params) {
+      const { results, count } = await getTopicList(params)
+      this.searchEsclusters = this.estopics = results
+      this.totalNum = count
+      // getTopicList(params).then(res => {
+      //   this.searchEsclusters = this.estopics = res.results
+      //   this.totalNum = res.count
+      // })
     },
 
     /* 获取当前页码，并作为参数调用list接口 */
     handleCurrentChange(val) {
       this.params.page = val
-      this.fetchData()
+      this.fetchData(this.params)
       // console.log(this.params.page)
     },
     searchClick() {
-      this.fetchData()
+      this.fetchData(this.params)
     },
 
     /* 添加功能,弹出模态窗、提交数据、取消 */
@@ -188,7 +170,7 @@ export default {
           type: 'success'
         })
         this.handleCancelAdd()
-        this.fetchData()
+        this.fetchData(this.params)
       },
       err => {
         console.log(err.response)
@@ -218,7 +200,7 @@ export default {
           type: 'success'
         })
         this.handleCancelEdit()
-        this.fetchData()
+        this.fetchData(this.params)
       },
       err => {
         console.log(err.message)
@@ -235,27 +217,51 @@ export default {
           message: '删除ES集群成功',
           type: 'success'
         })
-        this.fetchData()
+        this.fetchData(this.params)
       },
       err => {
         console.log(err.message)
       })
     },
     searchEnv(val) {
-      return this.estopics.filter(item => {
-        if (item.env === val) {
-          console.log(item)
-          return item
-        }
-      })
-    },
-    searchPort(val) {
-      return this.estopics.filter(item => {
-        if (item.port === parseInt(val)) {
-          console.log(item)
-          return item
-        }
-      })
+      // var searchList = []
+      // console.log(val)
+      // console.log(val['length'])
+      if (val['length'] === 0) {
+        this.params.cluster_include = ''
+        this.fetchData(this.params)
+      } else {
+        this.params.cluster_include = val.join(',')
+        this.fetchData(this.params)
+        // for (let index = 0; index < val.length; index++) {
+        //   // console.log(val[index])
+        //   this.params.cluster = val[index]
+        //   console.log(val[index])
+        //   getTopicList(this.params).then((res) => {
+        //     if (res.results.length > 0) {
+        //       this.searchList.push(res.results)
+        //       val = []
+        //       console.log(this.searchList)
+        //     }
+        //   })
+
+        // if (data.results.length > 1) {
+        //   searchList.push(data.results)
+        // }
+        // console.log(searchList)
+        // getTopicList(this.params).then(res => {
+        //   console.log(res.results, 88)
+        //   searchList.push(this.estopics)
+        // })
+        // console.log(this.estopics)
+        // }
+      }
+      // return this.estopics.filter(item => {
+      //   if (item.env === val) {
+      //     console.log(item)
+      //     return item
+      //   }
+      // })
     },
     sortChange(column) {
       console.log(column)
@@ -265,7 +271,6 @@ export default {
           console.log(column.order)
           this.params.ordering = 'createTime'
           getTopicList(this.params).then(res => {
-            console.log(res)
             this.estopics = res.results
           })
         } else if (column.prop === 'createTime' && column.order === 'descending') {
