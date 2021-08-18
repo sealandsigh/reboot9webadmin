@@ -112,7 +112,6 @@ export default {
     getfor(row, column) {
       var esclustername = []
       for (var i = 0; i < row.escluster.length; i++) {
-        console.log(esclustername)
         // this.rowlist.push(row.roles[i].name)
         esclustername.push(row.escluster[i].code)
       }
