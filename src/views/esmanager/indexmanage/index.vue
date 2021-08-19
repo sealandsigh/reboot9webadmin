@@ -183,37 +183,57 @@ export default {
       return arr
     },
 
+    selectData() {
+      getEsclusterList(this.params).then(res => {
+        // console.log(res)
+        this.esclusters = res.results
+        this.totalesNum = res.count
+        for (let index = 0; index < this.esclusters.length; index++) {
+          this.estmpList.push(this.esclusters[index].code)
+        }
+        // console.log(this.estmpList)
+        // console.log(this.unique(this.estmpList))
+        for (let index = 0; index < this.unique(this.estmpList).length; index++) {
+          var data = {
+            value: this.estmpList[index],
+            label: this.estmpList[index]
+          }
+          this.options.push(data)
+        }
+      })
+    },
+
     fetchclusterName(val) {
       if (val === true) {
-        console.log('True')
-        if (parseInt(this.totalesNum) >= parseInt(this.esclusters.length)) {
+        if (parseInt(this.totalesNum) > parseInt(this.esclusters.length)) {
           this.estmpList = []
           this.params.page_size = this.totalesNum
-          console.log(this.params.page_size)
+          // 这是错误的使用方法
           // this.fetchclusterData().then(val => {
           //   console.log(this.esclusters)
           // })
-          this.fetchclusterData()
-          setTimeout(() => {
-            console.log(this.esclusters)
-            for (let index = 0; index < this.esclusters.length; index++) {
-              this.estmpList.push(this.esclusters[index].code)
-            }
-            // console.log(this.estmpList)
-            // console.log(this.unique(this.estmpList))
-            for (let index = 0; index < this.unique(this.estmpList).length; index++) {
-              var data = {
-                value: this.estmpList[index],
-                label: this.estmpList[index]
-              }
-              this.options.push(data)
-            }
-          }, 200)
+
+          // 以下是临时的方法setTimeout能通但实际不行，最终还是通过方法直接实现
+          // this.fetchclusterData()
+          // setTimeout(() => {
+          //   console.log(this.esclusters)
+          //   for (let index = 0; index < this.esclusters.length; index++) {
+          //     this.estmpList.push(this.esclusters[index].code)
+          //   }
+          //   // console.log(this.estmpList)
+          //   // console.log(this.unique(this.estmpList))
+          //   for (let index = 0; index < this.unique(this.estmpList).length; index++) {
+          //     var data = {
+          //       value: this.estmpList[index],
+          //       label: this.estmpList[index]
+          //     }
+          //     this.options.push(data)
+          //   }
+          // }, 200)
+          this.selectData()
         } else {
-          console.log(this.totalesNum / this.esclusters.length)
-          console.log(this.totalesNum)
-          console.log(this.esclusters.length)
-          console.log('small 1111')
+          this.estmpList = []
+          this.selectData()
         }
       } else {
         this.options = []
