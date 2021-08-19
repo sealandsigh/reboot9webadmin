@@ -4,7 +4,7 @@
       <!--选择-->
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="6">
-          <el-select v-model="value" multiple clearable placeholder="集群筛选：-- ALL --" @change="searchEnv">
+          <el-select v-model="value" multiple clearable placeholder="集群筛选：-- ALL --" @change="searchEnv" @visible-change="fetchclusterName">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -70,6 +70,7 @@
 <script>
 /* 引入api，组件 */
 import { getTopicList, createTopic, updateTopic, deleteTopic } from '@/api/esmanager/indexmanager'
+import { getEsclusterList } from '@/api/esmanager/escluster'
 import EstopicList from './table'
 import EstopicForm from './form'
 
@@ -82,33 +83,47 @@ export default {
   /* 数据 */
   data() {
     return {
+      estmpList: [],
       searchList: [],
       dialogVisibleForAdd: false,
       dialogVisibleForEdit: false,
       currentValue: {},
       estopics: [],
+      esclusters: [],
       searchEstopics: [],
       totalNum: 0,
+      totalesNum: 0,
       pagesize: 10,
       params: {
         page: 1,
         search: '',
         ordering: '',
-        cluster_include: ''
+        cluster_include: '',
+        page_size: ''
       },
-      options: [{
-        value: 'testtest',
-        label: 'testtest'
-      }, {
-        value: 't-me-elk',
-        label: 't-me-elk'
-      }, {
-        value: 'd-appsearch-elk',
-        label: 'd-appsearch-elk'
-      }],
+      // options: [{
+      //   value: 'testtest',
+      //   label: 'testtest'
+      // }, {
+      //   value: 't-me-elk',
+      //   label: 't-me-elk'
+      // }, {
+      //   value: 'd-appsearch-elk',
+      //   label: 'd-appsearch-elk'
+      // }],
+      options: [],
       value: ''
     }
   },
+
+  computed: {
+  },
+
+  // watch: {
+  //   esclusters(val) {
+  //     this.fetchclusterName()
+  //   }
+  // },
 
   // watch: {
   //   value(val) {
@@ -130,6 +145,7 @@ export default {
   /* 根据生命周期，调用接口初始化数据 */
   created() {
     this.fetchData(this.params)
+    this.fetchclusterData()
   },
 
   /* 接口调用集 */
@@ -138,12 +154,70 @@ export default {
     /* 调用list接口，拉取数据 */
     async fetchData(params) {
       const { results, count } = await getTopicList(params)
+      // console.log(results)
       this.searchEsclusters = this.estopics = results
       this.totalNum = count
       // getTopicList(params).then(res => {
       //   this.searchEsclusters = this.estopics = res.results
       //   this.totalNum = res.count
       // })
+    },
+
+    fetchclusterData() {
+      getEsclusterList(this.params).then(res => {
+        // console.log(res)
+        this.esclusters = res.results
+        this.totalesNum = res.count
+      })
+    },
+
+    unique(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j = i + 1; j < arr.length; j++) {
+          if (arr[i] === arr[j]) {
+            arr.splice(j, 1)
+            j--
+          }
+        }
+      }
+      return arr
+    },
+
+    fetchclusterName(val) {
+      if (val === true) {
+        console.log('True')
+        if (parseInt(this.totalesNum) >= parseInt(this.esclusters.length)) {
+          this.estmpList = []
+          this.params.page_size = this.totalesNum
+          console.log(this.params.page_size)
+          // this.fetchclusterData().then(val => {
+          //   console.log(this.esclusters)
+          // })
+          this.fetchclusterData()
+          setTimeout(() => {
+            console.log(this.esclusters)
+            for (let index = 0; index < this.esclusters.length; index++) {
+              this.estmpList.push(this.esclusters[index].code)
+            }
+            // console.log(this.estmpList)
+            // console.log(this.unique(this.estmpList))
+            for (let index = 0; index < this.unique(this.estmpList).length; index++) {
+              var data = {
+                value: this.estmpList[index],
+                label: this.estmpList[index]
+              }
+              this.options.push(data)
+            }
+          }, 200)
+        } else {
+          console.log(this.totalesNum / this.esclusters.length)
+          console.log(this.totalesNum)
+          console.log(this.esclusters.length)
+          console.log('small 1111')
+        }
+      } else {
+        this.options = []
+      }
     },
 
     /* 获取当前页码，并作为参数调用list接口 */
