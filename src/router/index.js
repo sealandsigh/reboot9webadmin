@@ -48,14 +48,14 @@ export const constantRouterMap = [
         path: 'user',
         name: 'user',
         component: () => import('@/views/users/user'),
-        meta: { title: '用户' }
+        meta: { title: '用户', icon: 'usernew' }
       },
       {
         path: 'groups',
         name: 'groups',
         permission: 'resources.add_ip',
         component: () => import('@/views/groups'),
-        meta: { title: '用户组' }
+        meta: { title: '用户组', icon: 'usergroup' }
       }
     ]
   },
@@ -151,7 +151,7 @@ export const constantRouterMap = [
         path: 'indexmanage',
         name: '索引管理',
         component: () => import('@/views/esmanager/indexmanage/index'),
-        meta: { title: '索引管理', icon: 'table' }
+        meta: { title: '索引管理', icon: 'file' }
       }
     ]
   },
